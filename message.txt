@@ -1,0 +1,258 @@
+CREATE TABLE Branch (
+    branch_id INT PRIMARY KEY,
+    city VARCHAR(255),
+    address VARCHAR(255),
+    contact_info VARCHAR(255)
+)
+
+CREATE TABLE Car (
+    car_id INT PRIMARY KEY,
+    license_plate VARCHAR(255),
+    model VARCHAR(255),
+    brand VARCHAR(255),
+    category VARCHAR(255),
+    year_of_manufacture INT,
+    rental_status VARCHAR(255),
+    branch_id INT,
+    FOREIGN KEY (branch_id) REFERENCES Branch(branch_id)
+)
+
+CREATE TABLE Customer (
+    customer_id VARCHAR(255) PRIMARY KEY,
+    name VARCHAR(255),
+    date_of_birth DATE,
+    phone VARCHAR(255),
+    email VARCHAR(255),
+    address VARCHAR(255)
+)
+
+CREATE TABLE Rental (
+    rental_id INT PRIMARY KEY,
+    start_date DATE,
+    end_date DATE,
+    daily_rate DECIMAL(10,2),
+    total_cost DECIMAL(10,2),
+    customer_id VARCHAR(255),
+    car_id INT,
+    FOREIGN KEY (customer_id) REFERENCES Customer(customer_id),
+    FOREIGN KEY (car_id) REFERENCES Car(car_id)
+)
+
+CREATE TABLE Payment (
+    payment_id INT PRIMARY KEY,
+    payment_date DATE,
+    amount DECIMAL(10,2),
+    method VARCHAR(255),
+    rental_id INT,
+    FOREIGN KEY (rental_id) REFERENCES Rental(rental_id)
+)
+
+CREATE TABLE Staff (
+    employee_id INT PRIMARY KEY,
+    name VARCHAR(255),
+    role VARCHAR(255),
+    salary DECIMAL(10,2),
+    branch_id INT,
+    FOREIGN KEY (branch_id) REFERENCES Branch(branch_id)
+)
+
+CREATE TABLE Maintenance (
+    maintenance_id INT PRIMARY KEY,
+    maintenance_date DATE,
+    description VARCHAR(255),
+    cost DECIMAL(10,2),
+    car_id INT,
+    FOREIGN KEY (car_id) REFERENCES Car(car_id)
+)
+
+
+--Insert at least 5 rows data in each table. Write SELECT * for each table and do a
+--SNIP or screen dump that shows your tables - DONE BELOW
+
+
+-- 1. INSERT for Branch
+INSERT INTO Branch (branch_id, city, address, contact_info) VALUES
+(1, 'Newark', '123 University Ave', '973-555-1234'),
+(2, 'Jersey City', '456 Main St', '201-555-5678'),
+(3, 'Paterson', '789 Market St', '862-555-9012'),
+(4. 'Elizabeth', '101 Broad St', '908-555-3456'),
+(5, 'Toms River', '202 Hooper Ave', '732-555-7890');
+
+-- 2. INSERT for Customer
+INSERT INTO Customer (customer_id, name, dob, phone, email, address) VALUES
+(101, 'Alice Smith', '1990-05-15', '555-111-2222', 'alice@email.com', '10 Elm St, Newark'),
+(102, 'Bob Johnson', '1985-11-30', '555-333-4444', 'bob@email.com', '20 Oak St, Jersey City'),
+(103, 'Charlie Brown', '2000-02-20', '555-555-6666', 'charlie@email.com', '30 Pine St, Paterson'),
+(104, 'Diana Prince', '1995-08-10', '555-777-8888', 'diana@email.com', '40 Maple St, Elizabeth'),
+(105, 'Evan Wright', '1998-07-25', '555-999-0000', 'evan@email.com', '50 Birch St, Newark');
+
+-- 3. INSERT for Staff (assumes branch_id 1, 2, 3 exist)
+INSERT INTO Staff (employee_id, name, salary, branch_id) VALUES
+(501, 'Serge Lawson', 60000, 1),
+(502, 'Adam Kruszewski', 62000, 1),
+(503, 'Peter Saburov', 58000, 2),
+(504, 'Mary Jane', 75000, 2),
+(505, 'John Smith', 55000, 3);
+
+-- 4. INSERT for Car (assumes branch_id 1, 2, 3 exist)
+INSERT INTO Car (car_id, license_plate, model, brand, category, year_of_manufacture, rental_status, branch_id) VALUES
+(201, 'NJ-ABC1', 'Camry', 'Toyota', 'sedan', 2022, 'available', 1),
+(202, 'NJ-DEF2', 'Rav4', 'Toyota', 'SUV', 2023, 'rented', 1),
+(203, 'NJ-GHI3', 'Civic', 'Honda', 'sedan', 2021, 'maintenance', 2),
+(204, 'NJ-JKL4', 'Mustang', 'Ford', 'hatchback', 2023, 'available', 2),
+(205, 'NJ-MNO5', 'Explorer', 'Ford', 'SUV', 2022, 'available', 3);
+
+-- 5. INSERT for Maintenance_Record (assumes car_id 201, 202, 203, 205 exist)
+INSERT INTO Maintenance (maintenance_id, date, description, cost, car_id) VALUES
+(301, '2024-10-20', 'Oil change', 75.00, 201),
+(302, '2024-11-01', 'Tire rotation', 45.00, 202),
+(303, '2024-11-05', 'Brake replacement', 450.00, 203),
+(304, '2024-11-10', 'Oil change', 80.00, 205),
+(305, '2024-11-12', 'Wiper blade replacement', 30.00, 201);
+
+-- 6. INSERT for Rental_Agreement (assumes customer_id and car_id exist)
+INSERT INTO Rental (rental_id, start_date, end_date, daily_rate, total_cost, customer_id, car_id) VALUES
+(401, '2024-11-01', '2024-11-04', 60.00, 180.00, 101, 201),
+(402, '2024-11-02', '2024-11-07', 75.00, 375.00, 102, 202),
+(403, '2024-11-05', '2024-11-08', 55.00, 165.00, 103, 204),
+(404, '2024-11-06', '2024-11-10', 80.00, 320.00, 104, 205),
+(405, '2024-11-10', '2024-11-12', 60.00, 120.00, 101, 201);
+
+-- 7. INSERT for Payment (assumes rental_id 401-405 exist)
+INSERT INTO Payment (payment_id, date, amount, method, rental_id) VALUES
+(601, '2024-11-04', 180.00, 'card', 401),
+(602, '2024-11-07', 375.00, 'card', 402),
+(603, '2024-11-08', 165.00, 'cash', 403),
+(604, '2024-11-10', 320.00, 'card', 404),
+(605, '2024-11-12', 120.00, 'cash', 405);
+
+SELECT * FROM Branch;
+SELECT * FROM Customer;
+SELECT * FROM Staff;
+SELECT * FROM Car;
+SELECT * FROM Maintenance_Record;
+SELECT * FROM Rental_Agreement;
+SELECT * FROM Payment;
+COMMIT;
+
+
+--Write SQL statements to update 1 column and delete 1 row for each table. You may
+--copy and paste SQL statements from your own DBMS to the file you’ll upload - DONE BELOW
+
+-- 1. Branch
+-- UPDATE: Change the contact info for the Newark branch
+UPDATE Branch
+SET contact_info = '973-555-4321'
+WHERE branch_id = 1;
+
+-- DELETE: Remove the Toms River branch (assumes no staff or cars reference it)
+DELETE FROM Branch
+WHERE branch_id = 5;
+
+
+-- 2. Customer
+-- UPDATE: Change Alice Smith's phone number
+UPDATE Customer
+SET phone = '555-111-9999'
+WHERE customer_id = 101;
+
+-- DELETE: Remove Evan Wright (assumes he has no rentals)
+DELETE FROM Customer
+WHERE customer_id = 105;
+
+
+-- 3. Staff
+-- UPDATE: Give Serge Lawson a raise
+UPDATE Staff
+SET salary = 65000
+WHERE employee_id = 501;
+
+-- DELETE: Remove John Doe from staff
+DELETE FROM Staff
+WHERE employee_id = 505;
+
+
+-- 4. Car
+-- UPDATE: Change car 203's status from 'maintenance' to 'available'
+UPDATE Car
+SET rental_status = 'available'
+WHERE car_id = 203;
+
+-- DELETE: Remove car 203.
+-- (Note: This will fail if Maintenance_Record 303 still references it.
+-- You would need to delete child records first.)
+DELETE FROM Car
+WHERE car_id = 203;
+
+
+-- 5. Maintenance_Record
+-- UPDATE: Update the cost of the brake replacement for car 203
+UPDATE Maintenance_Record
+SET cost = 475.00
+WHERE maintenance_id = 303;
+
+-- DELETE: Remove the 'Tire rotation' record
+DELETE FROM Maintenance_Record
+WHERE maintenance_id = 302;
+
+
+-- 6. Rental_Agreement
+-- UPDATE: Adjust the total_cost for rental 401 due to a discount
+UPDATE Rental_Agreement
+SET total_cost = 170.00
+WHERE rental_id = 401;
+
+-- DELETE: Remove rental agreement 405
+-- (Note: You should delete Payment 605 before running this)
+DELETE FROM Rental_Agreement
+WHERE rental_id = 405;
+
+
+-- 7. Payment
+-- UPDATE: Change the payment method for payment 603 from 'cash' to 'card'
+UPDATE Payment
+SET method = 'card'
+WHERE payment_id = 603;
+
+-- DELETE: Remove payment 605
+DELETE FROM Payment
+WHERE payment_id = 605;
+
+--Write four SQL queries, in English & SQL:
+  --1 contains GROUP BY
+  --1 contains GROUP BY and HAVING
+  --1 contains nested query with ALL 
+  --1 contains nested query with IN 
+
+--Counting how many customers pay with a credit card vs cash 
+SELECT method, COUNT(*)
+FROM Payment;
+GROUP BY method;
+
+--Retrieve how many cars were manufactured each year,
+--but only for years where that number is less than 2.
+SELECT car.year_of_manufacture, COUNT(*)
+FROM Car car 
+GROUP BY car.year_of_manufacture
+HAVING COUNT(*) >= 2;
+
+
+--Retrieve which cars have the greatest car_id within the table and check 
+--Whether they had maintenance in 2024.
+SELECT car.model, car.year_of_manufacture 
+FROM Car car 
+WHERE car.car_id > ALL (
+  SELECT m.car_id 
+  FROM Maintenance m 
+  JOIN Rental_Agreement r ON m.car_id = r.car_id 
+    WHERE r.start_date BETWEEN '01-JAN-24' AND '31-DEC-24'
+);
+
+--Retrieve a list of customers who rented a car in 2024.
+SELECT c.customer_id 
+FROM Customer
+WHERE c.customer_id IN (
+  SELECT r.customer_id 
+  FROM Rental_Agreement r 
+  WHERE r.start_date BETWEEN '01-JAN-24' AND '31-DEC-24'
+);
