@@ -74,9 +74,6 @@ tr:hover {
 <?php
 
 // Check if user is logged in
-// Note: This app does not have a role-based system in the database.
-// In a production environment, you should add a 'role' column to the Customer table
-// and check if the user has admin privileges before allowing access to this page.
 
 // Connect to database
 try {

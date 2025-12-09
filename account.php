@@ -57,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_info'])) {
     $address = trim($_POST['address'] ?? '');
     $date_of_birth = trim($_POST['date_of_birth'] ?? '');
     
-    // Basic validation
+    // empty validation
     $errors = [];
     if (empty($name)) {
         $errors[] = "Name is required.";
@@ -94,7 +94,7 @@ $userStmt = $pdo->prepare("
 $userStmt->execute([$cid]);
 $user = $userStmt->fetch(PDO::FETCH_ASSOC);
 
-// Handle case where user is not found
+// if user not found
 if (!$user) {
     $user = [];
 }
@@ -111,7 +111,7 @@ $stmt->execute([$cid]);
 $cars = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
-<!-- User Information Card -->
+<!-- User Info-->
 <div class="w3-container" style="margin-top:20px; margin-bottom:40px; max-width:800px; margin-left:auto; margin-right:auto;">
     <?php echo $updateMessage; ?>
     <div class="w3-card-4">
@@ -119,7 +119,7 @@ $cars = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <h2>Your Information</h2>
         </div>
         
-        <!-- View Mode -->
+        <!-- View-->
         <div id="view-mode" class="w3-container" style="padding:20px;">
             <p><strong>Name:</strong> <?php echo htmlspecialchars($user['name'] ?? 'Not provided'); ?></p>
             <p><strong>Email:</strong> <?php echo htmlspecialchars($user['email'] ?? 'Not provided'); ?></p>
@@ -129,7 +129,7 @@ $cars = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <button onclick="toggleEditMode()" class="w3-button w3-red w3-margin-top">Edit Info</button>
         </div>
         
-        <!-- Edit Mode -->
+        <!-- Edit-->
         <div id="edit-mode" class="w3-container" style="padding:20px; display:none;">
             <form method="post" action="account.php">
                 <p><label><strong>Name:</strong></label><br>
