@@ -1,3 +1,10 @@
+<?php
+session_start();
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -65,20 +72,15 @@ tr:hover {
 </header>
 
 <?php
-session_start();
 
 // Check if user is logged in
 // Note: This app does not have a role-based system in the database.
 // In a production environment, you should add a 'role' column to the Customer table
 // and check if the user has admin privileges before allowing access to this page.
-if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
-    exit;
-}
 
 // Connect to database
 try {
-    $pdo = new PDO("mysql:host=localhost;dbname=mysql;charset=utf8","dbuser","dbpass");
+    $pdo = new PDO("mysql:host=database;dbname=mysql;charset=utf8","dbuser","dbpass");
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     
     // Query all rentals with customer and car details

@@ -1,3 +1,10 @@
+<?php
+session_start();
+session_unset();
+session_destroy();
+header("Location: login.php");
+exit;
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -29,13 +36,6 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
 
 </div>
 
-        <?php
-session_start();
-session_unset();
-session_destroy();
-header("Location: login.php");
-exit;
-?>
 
 <!-- Header -->
 <header class="w3-container w3-red w3-center" style="padding:128px 16px">

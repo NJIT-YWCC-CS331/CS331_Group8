@@ -1,3 +1,10 @@
+<?php
+session_start();
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -35,17 +42,9 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
   <p class="w3-xlarge">Very many cars for rent</p>
 </header>
 
-        <?php
-session_start();
 
-if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
-    exit;
-}
-?>
-
-        <?php
-$pdo = new PDO("mysql:host=localhost;dbname=mysql;charset=utf8","dbuser","dbpass");
+<?php
+$pdo = new PDO("mysql:host=database;dbname=mysql;charset=utf8","dbuser","dbpass");
 
 $stmt = $pdo->query("
     SELECT Car.*, Branch.address

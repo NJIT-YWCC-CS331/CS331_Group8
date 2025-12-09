@@ -1,3 +1,28 @@
+<?php
+session_start();
+
+$pdo = new PDO("mysql:host=database;dbname=mysql;charset=utf8", "dbuser", "dbpass");
+$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+// Handle login
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $username = $_POST['username'] ?? '';
+    $password = $_POST['password'] ?? '';
+
+    $stmt = $pdo->prepare("SELECT customer_id, password_hash FROM Customer WHERE email = ?");
+    $stmt->execute([$username]);
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($user && password_verify($password, $user['password_hash'])) {
+        $_SESSION['user_id'] = $user['customer_id'];
+        header("Location: account.php");
+        exit;
+    } else {
+        $error = "Invalid login.";
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -30,28 +55,6 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
 </div>
 
 <?php
-session_start();
-
-$pdo = new PDO("mysql:host=localhost;dbname=mysql;charset=utf8", "dbuser", "dbpass");
-$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-// Handle login
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = $_POST['username'] ?? '';
-    $password = $_POST['password'] ?? '';
-
-    $stmt = $pdo->prepare("SELECT customer_id, password_hash FROM customer WHERE email = ?");
-    $stmt->execute([$username]);
-    $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if ($user && password_verify($password, $user['password_hash'])) {
-        $_SESSION['user_id'] = $user['customer_id'];
-        header("Location: account.php");
-        exit;
-    } else {
-        $error = "Invalid login.";
-    }
-}
 
 // Handle signup
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['signup'])) {
@@ -60,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['signup'])) {
 
     if ($username && $password) {
         $password_hash = password_hash($password, PASSWORD_BCRYPT);
-        $stmt = $pdo->prepare("INSERT INTO customer (email, password_hash) VALUES (?, ?)");
+        $stmt = $pdo->prepare("INSERT INTO Customer (email, password_hash) VALUES (?, ?)");
         try {
             $stmt->execute([$username, $password_hash]);
             echo "Signup successful. You can now log in.";

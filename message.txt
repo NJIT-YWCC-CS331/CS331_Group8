@@ -1,12 +1,12 @@
 CREATE TABLE Branch (
-    branch_id INT PRIMARY KEY,
+    branch_id INT AUTO_INCREMENT PRIMARY KEY,
     city VARCHAR(255),
     address VARCHAR(255),
     contact_info VARCHAR(255)
-)
+);
 
 CREATE TABLE Car (
-    car_id INT PRIMARY KEY,
+    car_id INT AUTO_INCREMENT PRIMARY KEY,
     license_plate VARCHAR(255),
     model VARCHAR(255),
     brand VARCHAR(255),
@@ -15,37 +15,38 @@ CREATE TABLE Car (
     rental_status VARCHAR(255),
     branch_id INT,
     FOREIGN KEY (branch_id) REFERENCES Branch(branch_id)
-)
+);
 
 CREATE TABLE Customer (
-    customer_id VARCHAR(255) PRIMARY KEY,
+    customer_id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255),
     date_of_birth DATE,
     phone VARCHAR(255),
     email VARCHAR(255),
-    address VARCHAR(255)
-)
+    address VARCHAR(255),
+    password_hash VARCHAR(255)
+);
 
 CREATE TABLE Rental (
-    rental_id INT PRIMARY KEY,
+    rental_id INT AUTO_INCREMENT PRIMARY KEY,
     start_date DATE,
     end_date DATE,
     daily_rate DECIMAL(10,2),
     total_cost DECIMAL(10,2),
-    customer_id VARCHAR(255),
+    customer_id INT,
     car_id INT,
     FOREIGN KEY (customer_id) REFERENCES Customer(customer_id),
     FOREIGN KEY (car_id) REFERENCES Car(car_id)
-)
+);
 
 CREATE TABLE Payment (
-    payment_id INT PRIMARY KEY,
+    payment_id INT AUTO_INCREMENT PRIMARY KEY,
     payment_date DATE,
     amount DECIMAL(10,2),
     method VARCHAR(255),
     rental_id INT,
     FOREIGN KEY (rental_id) REFERENCES Rental(rental_id)
-)
+);
 
 CREATE TABLE Staff (
     employee_id INT PRIMARY KEY,

@@ -1,3 +1,10 @@
+<?php
+session_start();
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -35,18 +42,10 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
   <p class="w3-xlarge">cars you rent</p>
 </header>
 
-        <?php
-session_start();
-
-if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
-    exit;
-}
-?>
-        <?php
+<?php
 $cid = $_SESSION['user_id'];
 
-$pdo = new PDO("mysql:host=localhost;dbname=mysql;charset=utf8","dbuser","dbpass");
+$pdo = new PDO("mysql:host=database;dbname=mysql;charset=utf8","dbuser","dbpass");
 
 $updateMessage = '';
 
@@ -63,8 +62,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_info'])) {
     if (empty($name)) {
         $errors[] = "Name is required.";
     }
-    if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $errors[] = "Valid email is required.";
+    if (empty($email)) {
+        $errors[] = "Email is required.";
     }
     
     if (empty($errors)) {
@@ -137,7 +136,7 @@ $cars = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <input type="text" name="name" class="w3-input w3-border" value="<?php echo htmlspecialchars($user['name'] ?? ''); ?>" required></p>
                 
                 <p><label><strong>Email:</strong></label><br>
-                <input type="email" name="email" class="w3-input w3-border" value="<?php echo htmlspecialchars($user['email'] ?? ''); ?>" required></p>
+                <input type="text" name="email" class="w3-input w3-border" value="<?php echo htmlspecialchars($user['email'] ?? ''); ?>" required></p>
                 
                 <p><label><strong>Phone:</strong></label><br>
                 <input type="text" name="phone" class="w3-input w3-border" value="<?php echo htmlspecialchars($user['phone'] ?? ''); ?>"></p>
